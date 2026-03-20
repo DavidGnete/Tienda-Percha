@@ -142,8 +142,6 @@ export default async function ProductsView({ searchParams}: Props ) {
             <DeleteProductsBD productId={product.id} />
               </td>
 
-
-             
   
             </tr>
             ))}
