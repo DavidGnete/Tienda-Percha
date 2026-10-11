@@ -35,27 +35,32 @@ useEffect(() => {
         <label htmlFor="email">Correo electrónico</label>
         <input
           className="px-5 py-2 border bg-gray-200 rounded mb-5"
+          id='email'
           name='email'
-          type="email" />
+          type="email"
+          autoComplete="email" />
 
 
-        <label htmlFor="email">Contraseña</label>
+        <label htmlFor="password">Contraseña</label>
         <input
           className="px-5 py-2 border bg-gray-200 rounded mb-5"
+          id='password'
           name='password'
-          type="password" />
+          type="password"
+          autoComplete="current-password" />
 
          {errorMessage && (
             <div  className='flex flex-row mg-2'>
               <IoInformationOutline className="h-5 w-5 text-red-500" />
-              <p className="text-sm text-red-500">Credenciales no son correctas</p>
+              <p className="text-sm text-red-500">{errorMessage}</p>
             </div>
           )}
 
         <button type='submit'
-          className="btn-primary">
-          Ingresar
-    
+          disabled={isPending}
+          className="btn-primary disabled:opacity-50">
+          {isPending ? 'Ingresando...' : 'Ingresar'}
+
         </button>
 
 

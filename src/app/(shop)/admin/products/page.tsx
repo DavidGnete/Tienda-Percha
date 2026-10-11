@@ -1,6 +1,6 @@
 import { getPaginateProductsWithImages } from "@/actions";
 import { Pagination, ImageProducts, Title } from "@/components";
-import { CurrencyFormat } from "@/utils";
+import { CurrencyFormat, genderLabel } from "@/utils";
 import { IoTrash} from "react-icons/io5";
 import { DeleteProductsBD } from "@/components/product/delete-product/DeleteProductBD";
 import Image from "next/image";
@@ -126,7 +126,7 @@ export default async function ProductsView({ searchParams}: Props ) {
               </td>
 
               <td className="text-sm  text-gray-900 font-ligth px-6 py-4 whitespace-nowrap">
-            {product.gender}
+            {genderLabel(product.gender)}
               </td>
 
                <td className="text-sm  text-gray-900 font-bold px-6 py-4 whitespace-nowrap">

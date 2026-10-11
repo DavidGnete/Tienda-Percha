@@ -1,4 +1,3 @@
-"use server";
 
 import { getProductBySlug } from "@/actions";
 import { Title } from "@/components";

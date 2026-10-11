@@ -1,28 +1,40 @@
 "use client";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import Link from "next/link";
 
 import { Product, ProductImage, Category } from "@/interfaces";
 
 import clsx from "clsx";
 import { CreateUpdateProduct, DeleteProductImage } from "@/actions";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ImageProducts } from "@/components";
+import { categoryLabel, genderLabels } from "@/utils";
 
 interface Props {
   product: Partial<Product> & { ProductImage?: ProductImage[] };
   categories: Category[];
 }
 
-const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
+const sizes = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
+
+const fieldLabels: Record<string, string> = {
+  title: "Título",
+  description: "Descripción",
+  price: "Precio",
+  inStock: "Inventario",
+  gender: "Género",
+  categoryId: "Categoría",
+};
 
 interface FormInputs {
   title: string;
-  slug: string;
+  slug?: string;
   description: string;
   price: number;
-  inStock: number;
+  inStock?: number | string;
   sizes: string[];
-  tags: string;
+  tags?: string;
   gender: "men" | "women" | "kid" | "unisex";
   categoryId: string;
 
@@ -32,14 +44,22 @@ interface FormInputs {
 export const  ProductForm = ({ product, categories }: Props) => {
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  // Al crear, la página se vuelve a montar con el nuevo slug; ?saved=1 conserva el aviso
+  const [message, setMessage] = useState<{ type: "success" | "error"; text: string; slug?: string } | null>(
+    searchParams.get("saved") && product.slug
+      ? { type: "success", text: "Producto creado y publicado", slug: product.slug }
+      : null,
+  );
 
 
   const {
     handleSubmit,
     register,
-    formState: { isValid },
+    formState: { errors, isSubmitting },
     getValues,
     setValue,
+    resetField,
     watch,
   } = useForm<FormInputs>({
     defaultValues: {
@@ -61,6 +81,13 @@ export const  ProductForm = ({ product, categories }: Props) => {
   };
 
   const onSubmit = async (data: FormInputs) => {
+    setMessage(null);
+
+    if (data.sizes.length === 0) {
+      setMessage({ type: "error", text: "Seleccione al menos una talla" });
+      return;
+    }
+
     const formData = new FormData();
 
     const {images, ...producToSave } = data;
@@ -69,12 +96,12 @@ export const  ProductForm = ({ product, categories }: Props) => {
       formData.append("id", product.id ?? "");
     }
     formData.append("title", producToSave.title);
-    formData.append("slug", producToSave.slug);
+    formData.append("slug", producToSave.slug ?? "");
     formData.append("description", producToSave.description);
     formData.append("price", producToSave.price.toString());
-    formData.append("inStock", producToSave.inStock.toString());
+    formData.append("inStock", String(producToSave.inStock ?? ""));
     formData.append("sizes", producToSave.sizes.toString());
-    formData.append("tags", producToSave.tags);
+    formData.append("tags", producToSave.tags ?? "");
     formData.append("categoryId", producToSave.categoryId);
     formData.append("gender", producToSave.gender);
 
@@ -84,14 +111,41 @@ export const  ProductForm = ({ product, categories }: Props) => {
       }
     }
 
-    const { ok, product:updateProduct } = await CreateUpdateProduct(formData);
+    try {
+      const { ok, product: updateProduct, message } = await CreateUpdateProduct(formData);
 
-    if ( !ok ) {
-      alert('producto no se pudo actualizar')
+      if ( !ok || !updateProduct ) {
+        setMessage({ type: "error", text: message ?? "El producto no se pudo guardar" });
+        return;
+      }
+
+      resetField("images");
+      setMessage({
+        type: "success",
+        text: product.id ? "Producto actualizado" : "Producto creado y publicado",
+        slug: updateProduct.slug,
+      });
+
+      if (product.id) {
+        router.replace(`/admin/product/${updateProduct.slug}`);
+        router.refresh();
+      } else {
+        router.replace(`/admin/product/${updateProduct.slug}?saved=1`);
+      }
+    } catch (error) {
+      // Ej: las imágenes superan el límite de 10mb de las Server Actions
+      console.error(error);
+      setMessage({ type: "error", text: "Error al enviar el formulario. Revise el tamaño de las imágenes (máx. 10MB en total)" });
+    }
+  };
+
+  const onDeleteImage = async (imageId: number, imageUrl: string) => {
+    const resp = await DeleteProductImage(imageId, imageUrl);
+    if (!resp?.ok) {
+      setMessage({ type: "error", text: "No se pudo eliminar la imagen" });
       return;
     }
-
-    router.replace(`/admin/product/${updateProduct?.slug}`)
+    router.refresh();
   };
 
   return (
@@ -99,6 +153,29 @@ export const  ProductForm = ({ product, categories }: Props) => {
       onSubmit={handleSubmit(onSubmit)}
       className="grid px-5 mb-16 grid-cols-1 sm:px-0 sm:grid-cols-2 gap-3"
     >
+      {message && (
+        <div
+          className={clsx("sm:col-span-2 p-3 rounded-md whitespace-pre-line", {
+            "bg-green-100 text-green-800": message.type === "success",
+            "bg-red-100 text-red-800": message.type === "error",
+          })}
+        >
+          {message.text}
+          {message.slug && (
+            <Link href={`/product/${message.slug}`} className="ml-2 underline font-semibold">
+              Ver en la tienda
+            </Link>
+          )}
+        </div>
+      )}
+
+      {Object.keys(errors).length > 0 && (
+        <div className="sm:col-span-2 p-3 rounded-md bg-red-100 text-red-800">
+          Complete todos los campos obligatorios:{" "}
+          {Object.keys(errors).map((field) => fieldLabels[field] ?? field).join(", ")}
+        </div>
+      )}
+
       {/* Textos */}
       <div className="w-full">
         <div className="flex flex-col mb-2">
@@ -111,11 +188,12 @@ export const  ProductForm = ({ product, categories }: Props) => {
         </div>
 
         <div className="flex flex-col mb-2">
-          <span>Slug</span>
+          <span>Slug <small className="text-gray-500">(opcional)</small></span>
           <input
             type="text"
+            placeholder="Se genera automáticamente desde el título"
             className="p-2 border rounded-md bg-gray-200"
-            {...register("slug", { required: true })}
+            {...register("slug")}
           />
         </div>
 
@@ -129,7 +207,7 @@ export const  ProductForm = ({ product, categories }: Props) => {
         </div>
 
         <div className="flex flex-col mb-2">
-          <span>Price</span>
+          <span>Precio</span>
           <input
             type="number"
             className="p-2 border rounded-md bg-gray-200"
@@ -138,30 +216,32 @@ export const  ProductForm = ({ product, categories }: Props) => {
         </div>
 
         <div className="flex flex-col mb-2">
-          <span>Tags</span>
+          <span>Etiquetas <small className="text-gray-500">(opcional, separadas por coma)</small></span>
           <input
             type="text"
+            placeholder="Se generan automáticamente"
             className="p-2 border rounded-md bg-gray-200"
-            {...register("tags", { required: true })}
+            {...register("tags")}
           />
         </div>
 
         <div className="flex flex-col mb-2">
-          <span>Gender</span>
+          <span>Género</span>
           <select
             className="p-2 border rounded-md bg-gray-200"
             {...register("gender", { required: true })}
           >
             <option value="">[Seleccione]</option>
-            <option value="men">Men</option>
-            <option value="women">Women</option>
-            <option value="kid">Kid</option>
-            <option value="unisex">Unisex</option>
+            {Object.entries(genderLabels).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
           </select>
         </div>
 
         <div className="flex flex-col mb-2">
-          <span>Categoria</span>
+          <span>Categoría</span>
           <select
             className="p-2 border rounded-md bg-gray-200"
             {...register("categoryId", { required: true })}
@@ -169,23 +249,30 @@ export const  ProductForm = ({ product, categories }: Props) => {
             <option value="">[Seleccione]</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
-                {category.name}{" "}
+                {categoryLabel(category.name)}
               </option>
             ))}
           </select>
         </div>
 
-        <button className="btn-primary w-full">Guardar</button>
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="btn-primary w-full disabled:opacity-50"
+        >
+          {isSubmitting ? "Guardando..." : "Guardar"}
+        </button>
       </div>
 
       {/* Selector de tallas y fotos */}
       <div className="w-full">
         <div className="flex flex-col mb-2">
-          <span>Inventario</span>
+          <span>Inventario <small className="text-gray-500">(opcional)</small></span>
           <input
             type="number"
+            placeholder="Sin especificar"
             className="p-2 border rounded-md bg-gray-200"
-            {...register("inStock", { required: true, min: 0 })}
+            {...register("inStock", { min: 0 })}
           />
         </div>
 
@@ -234,7 +321,7 @@ export const  ProductForm = ({ product, categories }: Props) => {
 
                 <button
                   type="button"
-                  onClick={() => DeleteProductImage(image.id, image.url)}
+                  onClick={() => onDeleteImage(image.id, image.url)}
                   className="btn-danger w-full rounded-b-xl cursor-pointer"
                 >
                   Eliminar

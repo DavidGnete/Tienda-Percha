@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "eslint",
     "prisma:deploy": "npx prisma migrate deploy && prisma generate",
-    "seed": "tsx src/seed/seed-database.ts"
+    "seed": "tsx src/seed/seed-database.ts",
+    "create-admin": "tsx src/seed/create-admin.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.3.0",
