@@ -29,13 +29,16 @@ export async function generateMetadata(
   const product = await getProductBySlug(slug);
 
  
+  // Al compartir un producto se muestra su primera foto; sin fotos se usa el logo de la tienda
+  const image = product?.images?.[0];
+
   return {
     title: product?.title,
     description: product?.description ?? "",
     openGraph: {
     title: product?.title,
     description: product?.description ?? "",
-      images: [`${product?.images[1]}`],
+      ...(image && { images: [image] }),
     }
   }
 }
