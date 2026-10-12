@@ -16,7 +16,11 @@ interface Props {
   categories: Category[];
 }
 
-const sizes = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
+// Atajos para marcar tallas comunes; también se pueden escribir opciones libres (ej. "100 ml")
+const sizePresets = [
+  { label: "Ropa", sizes: ["XS", "S", "M", "L", "XL", "XXL", "XXXL"] },
+  { label: "Zapatos", sizes: ["34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44"] },
+];
 
 const fieldLabels: Record<string, string> = {
   title: "Título",
@@ -80,13 +84,20 @@ export const  ProductForm = ({ product, categories }: Props) => {
     setValue("sizes", Array.from(sizes));
   };
 
+  const [customSize, setCustomSize] = useState("");
+
+  const addCustomSize = () => {
+    // La coma separa opciones al enviar el formulario, por eso no se permite dentro de una opción
+    const size = customSize.replace(/,/g, "").trim();
+    if (!size) return;
+
+    const sizes = getValues("sizes");
+    if (!sizes.includes(size)) setValue("sizes", [...sizes, size]);
+    setCustomSize("");
+  };
+
   const onSubmit = async (data: FormInputs) => {
     setMessage(null);
-
-    if (data.sizes.length === 0) {
-      setMessage({ type: "error", text: "Seleccione al menos una talla" });
-      return;
-    }
 
     const formData = new FormData();
 
@@ -276,26 +287,76 @@ export const  ProductForm = ({ product, categories }: Props) => {
           />
         </div>
 
-        {/* As checkboxes */}
+        {/* Tallas / opciones: opcional (accesorios no llevan) */}
         <div className="flex flex-col">
-          <span>Tallas</span>
-          <div className="flex flex-wrap">
-            {sizes.map((size) => (
-              // bg-blue-500 text-white <--- si está seleccionado
-              <div
-                key={size}
-                onClick={() => onSizeChange(size)}
-                className={clsx(
-                  "p-2  cursor-pointer text-center border rounded-md mr-2 mb-2 w-14 transition-all",
-                  {
-                    "bg-blue-500 text-white": getValues("sizes").includes(size),
-                  },
-                )}
-              >
-                <span>{size}</span>
+          <span>Tallas / opciones <small className="text-gray-500">(opcional)</small></span>
+          <small className="text-gray-500 mb-2">
+            Marca tallas de ropa o zapatos, o escribe otras como &quot;100 ml&quot;. Déjalo vacío si el producto no tiene opciones.
+          </small>
+
+          {sizePresets.map((preset) => (
+            <div key={preset.label} className="mb-2">
+              <span className="text-sm text-gray-600">{preset.label}</span>
+              <div className="flex flex-wrap">
+                {preset.sizes.map((size) => (
+                  <div
+                    key={size}
+                    onClick={() => onSizeChange(size)}
+                    className={clsx(
+                      "p-2  cursor-pointer text-center border rounded-md mr-2 mb-2 w-14 transition-all",
+                      {
+                        "bg-blue-500 text-white": getValues("sizes").includes(size),
+                      },
+                    )}
+                  >
+                    <span>{size}</span>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+          ))}
+
+          <div className="flex mb-2">
+            <input
+              type="text"
+              value={customSize}
+              onChange={(e) => setCustomSize(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addCustomSize();
+                }
+              }}
+              maxLength={30}
+              placeholder="Otra opción, ej. 100 ml"
+              className="p-2 border rounded-md bg-gray-200 flex-1 mr-2"
+            />
+            <button type="button" onClick={addCustomSize} className="btn-secondary">
+              Agregar
+            </button>
           </div>
+
+          {getValues("sizes").length > 0 && (
+            <div className="flex flex-wrap mb-4">
+              <span className="text-sm text-gray-600 mr-2 py-1">Seleccionadas:</span>
+              {getValues("sizes").map((size) => (
+                <span
+                  key={size}
+                  className="flex items-center bg-blue-100 text-blue-800 rounded-full px-3 py-1 mr-2 mb-2 text-sm"
+                >
+                  {size}
+                  <button
+                    type="button"
+                    onClick={() => onSizeChange(size)}
+                    className="ml-2 font-bold cursor-pointer"
+                    aria-label={`Quitar ${size}`}
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
 
           <div className="flex flex-col mb-2">
             <span>Fotos</span>

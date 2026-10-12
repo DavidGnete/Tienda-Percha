@@ -21,7 +21,7 @@ export const ProductsInCart = () => {
   return (
     <>
       {ProductInCart.map((product) => (
-        <div key={`${product.slug}-${product.size}`} className="flex mb-10">
+        <div key={`${product.slug}-${product.size ?? ''}`} className="flex mb-10">
           <ImageProducts
             src={product.image}
             width={200}
@@ -40,6 +40,7 @@ export const ProductsInCart = () => {
               className="hover:underline cursor-pointer"
             >
               <p>{product.title} </p>
+              {product.size && <p className="text-sm text-gray-500">{product.size}</p>}
             </Link>
             <p>{product.price} </p>
             

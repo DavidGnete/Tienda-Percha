@@ -1,5 +1,6 @@
 // Etiquetas en español para mostrar en pantalla.
-// Los valores guardados en la base de datos (enum Gender y Category.name) no cambian.
+// Los valores del enum Gender en la base de datos siguen en inglés.
+// Las categorías se guardan en español (npm run setup); este mapa cubre nombres antiguos en inglés.
 
 export const genderLabels: Record<string, string> = {
     men: 'Hombre',

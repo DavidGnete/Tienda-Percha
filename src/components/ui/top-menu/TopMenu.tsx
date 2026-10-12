@@ -22,9 +22,9 @@ export const TopMenu = () => {
       <div>
         <Link href="/">
           <span className={`${titleFont.className} antialiased font-bold`}>
-            Paisita{" "}
+            Tu Perchita{" "}
           </span>
-          <span> | Temu</span>
+          <span> | Tienda</span>
         </Link>
       </div>
 

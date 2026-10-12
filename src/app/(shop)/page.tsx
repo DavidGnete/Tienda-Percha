@@ -16,9 +16,9 @@ interface Props {
 }
 
 const slidePromo = [
-  'Slide-Paisita.webp',
-  'promo1.webp',
-  'promo2.webp',
+  'Percha.webp',
+  'percha3.webp',
+  'percha2.webp',
 ]
 
 export default async function Home({ searchParams }: Props) {

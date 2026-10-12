@@ -7,7 +7,7 @@ export default function ShopLayout({children}: {
 }) {
   return (
     <main className="min-h-screen ">
-      <AnuncioModal />
+      {/* <AnuncioModal /> */}
       <TopMenu />
       <Sidebar />
       <MovilMenu />

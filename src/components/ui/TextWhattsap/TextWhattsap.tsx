@@ -2,15 +2,14 @@
 import React from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import { titleFont } from "@/config/fonts";
+import { WHATSAPP_NUMBER } from "@/config/whatsapp";
 
 export const TextWhattsap = () => {
-  const WhattsapNumber = "+573108006524";
-
   const HandleClick = () => {
     const message = encodeURIComponent(
-      "Hola, ¿como estas? /n estoy interesado en tener mi propia pagina web ",
+      "¡Hola, Tu Perchita! 👋 Vengo de su página web y quiero conocer más sobre sus prendas.",
     );
-    window.open(`https://wa.me/${WhattsapNumber}?text= ${message}`, "_blank");
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
   };
   return (
     <div
@@ -26,7 +25,7 @@ export const TextWhattsap = () => {
       lg:text-4xl
       xl:text-5xl`}
       >
-        ¿Te gustaría tener una plataforma como esta para tu negocio?
+        Tu estilo tiene un lugar: Tu Perchita
       </h1>
       <h2
         suppressHydrationWarning
@@ -35,8 +34,8 @@ export const TextWhattsap = () => {
       lg:text-xl lg:mt-8
       xl:text-2xl xl:mt-10`}
       >
-        Creamos tu tienda online personalizada para que recibas tus pedidos
-        organizados y ventas sin límites.
+        Prendas escogidas con cariño para que te veas auténtico todos los días.
+        Encuentra tu favorita, elige tu talla y pídela directo por WhatsApp.
       </h2>
 
       <button
@@ -67,7 +66,7 @@ export const TextWhattsap = () => {
                         lg:text-4xl
                         xl:text-5xl"
         />
-        Contactanos
+        Escríbenos
         
       </button>
     </div>

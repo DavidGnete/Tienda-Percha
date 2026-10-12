@@ -10,6 +10,7 @@
     "lint": "eslint",
     "prisma:deploy": "npx prisma migrate deploy && prisma generate",
     "seed": "tsx src/seed/seed-database.ts",
+    "setup": "tsx src/seed/setup.ts",
     "create-admin": "tsx src/seed/create-admin.ts"
   },
   "dependencies": {

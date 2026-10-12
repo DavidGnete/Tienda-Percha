@@ -3,7 +3,7 @@ interface Product {
   title: string;
   price: number;
   quantity: number;
-  size: string;
+  size?: string;
   slug: string;
   image?: string;
 }
@@ -70,14 +70,14 @@ const formatOrderMessage = (
 
   if(!summary) return '';
   // Encabezado
-  let message = 'Hola! Este es mi pedido de el Paisita ';
+  let message = '¡Hola, Tu Perchita! 🛍️ Vengo de su página web y este es mi pedido:\n';
 
   
 
 
   products.forEach((product, index) => {
     message += `\n${index + 1}. *${product.title}*\n`;
-    message += `   • Talla: ${product.size}\n`;
+    if (product.size) message += `   • Talla/opción: ${product.size}\n`;
     message += `   • Cantidad: ${product.quantity}\n`;
     message += `   • Precio unitario: $${product.price.toLocaleString('es-CO')}\n`;
     message += `   • Subtotal: $${(product.price * product.quantity).toLocaleString('es-CO')}\n`;

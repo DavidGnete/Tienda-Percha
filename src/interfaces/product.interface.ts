@@ -18,7 +18,8 @@ export interface CartProduct {
     title: string,
     price: number,
     quantity: number,
-    size: Size,
+    // Vacío o ausente si el producto no tiene tallas/opciones
+    size?: Size,
     image?: string,
 }
 
@@ -31,5 +32,6 @@ export interface ProductImage {
 
 
 export type ValidCategorie ='men'|'women'|'kid'|'unisex';
-export type Size = 'XS'|'S'|'M'|'L'|'XL'|'XXL'|'XXXL';
+// Talla u opción libre: 'M', '38', '100 ml'...
+export type Size = string;
 export type ValidType = 'shirts'|'pants'|'hoodies'|'hats';

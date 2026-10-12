@@ -28,18 +28,13 @@ async function uploadImageToCloudinary(imagePath: string) {
 async function main () {
 
  /*    await Promise.all([ */
-    await prisma.user.deleteMany();
-
     await prisma.productImage.deleteMany();
     await prisma.product.deleteMany();
     await prisma.category.deleteMany();
  /*    ]); */
 
-    const {categories, products, users} = initialData;
-
-    await prisma.user.createMany({
-        data: users
-    });
+    // No toca la tabla de usuarios: el admin se crea con npm run create-admin
+    const {categories, products} = initialData;
 
 /* {
     name: 'Shirt'

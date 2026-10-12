@@ -22,7 +22,8 @@ model Product {
   gender       Gender
   categoryId   String
   title        String
-  Size         Size[]         @default([])
+  // Tallas u opciones libres: ["S","M"], ["38","39"], ["100 ml"] o vacío (sin opciones)
+  Size         String[]       @default([])
   category     Category       @relation(fields: [categoryId], references: [id])
   ProductImage ProductImage[]
 
@@ -44,16 +45,6 @@ model User {
   password      String
   role          Role      @default(user)
   image         String?
-}
-
-enum Size {
-  XS
-  S
-  M
-  L
-  XL
-  XXL
-  XXXL
 }
 
 enum Gender {

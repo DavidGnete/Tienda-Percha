@@ -17,9 +17,12 @@ export const AddToCart = ({product}: Props) => {
     const [quantity, setquantity] =useState<number>(1);
     const [posted, setposted]= useState(false);
 
+    // Sin tallas/opciones (ej. accesorios) se agrega directo al carrito
+    const requiresSize = product.Size.length > 0;
+
     const addToCart = () =>{
         setposted(true);
-        if (!size) return;
+        if (requiresSize && !size) return;
 
         const cartProduct : CartProduct = {
           id: product.id,
@@ -41,9 +44,9 @@ export const AddToCart = ({product}: Props) => {
   return (
     <>
     {
-        posted && !size && (
+        posted && requiresSize && !size && (
          <span className='mg-2 text-red-300'>
-        Debe de seleccionar una Talla 
+        Debe seleccionar una talla u opción
     </span>
         )
     }

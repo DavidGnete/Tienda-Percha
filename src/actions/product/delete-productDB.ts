@@ -1,8 +1,20 @@
 "use server";
 import prisma from "@/lib/prisma";
+import { auth } from "@/auth.config";
 import { revalidatePath } from "next/cache";
 
 export const DeleteProductBD = async (productId: string) => {
+
+    // Solo los administradores pueden borrar productos
+    const session = await auth();
+    if ( session?.user?.role !== 'admin') {
+        return { ok: false, message: 'No autorizado' };
+    }
+
+    if ( typeof productId !== 'string' || !productId ) {
+        return { ok: false, message: 'Producto inválido' };
+    }
+
     try {
 
         await prisma.$transaction(async(tx) => {

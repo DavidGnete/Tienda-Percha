@@ -134,7 +134,7 @@ export default async function ProductsView({ searchParams}: Props ) {
               </td>
             
              <td className="text-sm  text-gray-900 font-bold px-6 py-4 whitespace-nowrap">
-            {product.Size.join(', ')}
+            {product.Size.length > 0 ? product.Size.join(', ') : '—'}
               </td>
 
 

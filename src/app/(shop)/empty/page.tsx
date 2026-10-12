@@ -1,5 +1,4 @@
 import { IoCafeOutline, IoCartOutline } from "react-icons/io5"
-import { Size } from '../../../interfaces/product.interface';
 import Link from "next/link";
 
 export default function () {

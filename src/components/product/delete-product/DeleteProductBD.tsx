@@ -10,8 +10,10 @@ interface Props {
 export const DeleteProductsBD =({productId}:Props) => {
 
     const onDelete = async () => {
-        await DeleteProductBD(productId)
+        if (!confirm('¿Eliminar este producto? Esta acción no se puede deshacer.')) return;
 
+        const { ok, message } = await DeleteProductBD(productId);
+        if (!ok) alert(message);
     };
   return (
     <button 

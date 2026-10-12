@@ -36,7 +36,6 @@ export const getPaginateProductsWithImages =async({
                 gender: gender,
             },
         });
-        console.log(gender)
 
         //obtener el total de las paginas 
         

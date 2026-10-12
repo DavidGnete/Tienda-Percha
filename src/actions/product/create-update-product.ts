@@ -1,7 +1,7 @@
 'use server';
 import prisma from '@/lib/prisma';
 import { auth } from '@/auth.config';
-import { Gender, Size, Product } from '@prisma/client';
+import { Gender, Product } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import { categoryLabel, genderLabel, slugify } from '@/utils';
 import {z} from 'zod';
@@ -24,10 +24,10 @@ const productSchema = z.object({
         z.coerce.number().min(0).transform( val => Number(val.toFixed(0)) ),
     ),
     categoryId: z.uuid(),
-    // "S,M,L" -> ['S','M','L'], al menos una talla válida
-    sizes: z.string()
-    .transform( val => val.split(',').map( s => s.trim()).filter(Boolean))
-    .pipe( z.array(z.enum(Size)).min(1, 'Seleccione al menos una talla') ),
+    // "S,M,L" -> ['S','M','L'], "38,39" o "100 ml". Opcional: vacío = sin tallas/opciones
+    sizes: z.string().optional().default('')
+    .transform( val => [...new Set(val.split(',').map( s => s.trim()).filter(Boolean))])
+    .pipe( z.array(z.string().max(30)).max(40) ),
     // Opcional: si viene vacío se generan del título, la categoría y el género
     tags: z.string().optional().default(''),
     gender:z.enum(Gender),
@@ -78,7 +78,7 @@ export const CreateUpdateProduct = async ( formData:FormData) => {
             const productData = {
                 ...scalarData,
                 category: { connect: { id: categoryId } },
-                Size: { set: sizes as Size[] },
+                Size: { set: sizes },
                 tags: { set: tagsArray },
             };
 

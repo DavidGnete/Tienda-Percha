@@ -5,6 +5,7 @@ import { OrderSumari } from "../cart/ui/orderSumari";
 import { useCartStore } from "@/store";
 import { WhattsapInformation } from "@/actions/WhattsappText/whattsap-text";
 import { useState } from "react";
+import { WHATSAPP_NUMBER } from "@/config/whatsapp";
 
 interface ordesumarryData {
   subTotal: number,
@@ -36,7 +37,7 @@ export default function () {
     };
 
     // 3️⃣ Enviar a WhatsApp
-    WhattsapInformation(orderData, '573225396360');
+    WhattsapInformation(orderData, WHATSAPP_NUMBER);
   };
   return (
     <div className="flex justify-center items-center mb-72 px-10 sm:px-0">
@@ -52,7 +53,7 @@ export default function () {
 
             {/*  Items del Carrito */}
             {productos.map((product) => (
-              <div key={product.slug} className="flex mb-10">
+              <div key={`${product.slug}-${product.size ?? ''}`} className="flex mb-10">
                 <ImageProducts
                   src={product.image ?? "/placeholder.png"}
                   width={100}
@@ -67,6 +68,7 @@ export default function () {
 
                 <div>
                   <p>{product.title} </p>
+                  {product.size && <p className="text-sm text-gray-500">{product.size}</p>}
                   <p>
                     ${product.price} x {product.quantity}{" "}
                   </p>
