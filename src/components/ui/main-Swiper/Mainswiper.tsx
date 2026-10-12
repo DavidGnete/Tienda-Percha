@@ -30,13 +30,15 @@ export const Mainswiper = ({images, clasName}: Props) => {
         modules={[Pagination, Autoplay]}
         className={styles.mySwiper} >
         {
-          images.map ( image => (
-          <SwiperSlide >
+          images.map ( (image, index) => (
+          <SwiperSlide key={image}>
             <Image 
             src={`/promotion/${image}`}
-            alt='imagenes'
+            alt={`Promoción Tu Perchita ${index + 1}`}
             fill
-            priority
+            sizes='100vw'
+            // Solo la primera foto se carga de inmediato; las demás cuando se necesitan
+            priority={index === 0}
             className='object-contain'/>
           </SwiperSlide>
           ))

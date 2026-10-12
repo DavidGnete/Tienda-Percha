@@ -68,7 +68,7 @@ export const AddToCart = ({product}: Props) => {
       {/* button */}
       <button 
       onClick={addToCart}
-      className="btn-primary my-5">
+      className="btn-primary my-5 w-full sm:w-auto cursor-pointer">
         Agregar al carrito
       </button>
     

@@ -8,6 +8,7 @@ import { getProductBySlug } from "@/actions";
 import { Metadata, ResolvingMetadata } from "next";
 
 import { AddToCart } from "./ui/AddToCart";
+import { CurrencyFormat } from "@/utils";
 
 
 interface Props {
@@ -80,12 +81,12 @@ export default async function ProductBySlugPager ({params}: Props ) {
         <h1 className={`${titleFont.className} antialiased font-bold text-xl `} >
           {product.title}
         </h1>
-        <p className="text-lg mb-5">${product.price} </p>
+        <p className="text-lg mb-5">{CurrencyFormat(product.price)}</p>
 
         <AddToCart product={product} />
 
       {/* Descripcion */}
-      <h3 className="font-bold text-sm"> Descripcion</h3>
+      <h3 className="font-bold text-sm">Descripción</h3>
       <p className="font-light">
         {product.description}
       </p>

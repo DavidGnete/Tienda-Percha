@@ -9,8 +9,8 @@ interface Props {
 
 export const Title = ({title, subtitle, className}:Props ) => {
   return (
-    <div className={`flex justify-center mt-10 mb-0 ${className}`}>
-    <h1 className={`${titleFont.className} antialiased text-4xl font-semibold my-10`}>
+    <div className={`flex justify-center text-center px-4 mt-6 sm:mt-10 mb-0 ${className}`}>
+    <h1 className={`${titleFont.className} antialiased text-2xl sm:text-4xl font-semibold my-6 sm:my-10`}>
         {title}
     </h1>
 

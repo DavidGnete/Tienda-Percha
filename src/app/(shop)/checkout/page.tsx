@@ -6,6 +6,7 @@ import { useCartStore } from "@/store";
 import { WhattsapInformation } from "@/actions/WhattsappText/whattsap-text";
 import { useState } from "react";
 import { WHATSAPP_NUMBER } from "@/config/whatsapp";
+import { CurrencyFormat } from "@/utils";
 
 interface ordesumarryData {
   subTotal: number,
@@ -40,15 +41,15 @@ export default function () {
     WhattsapInformation(orderData, WHATSAPP_NUMBER);
   };
   return (
-    <div className="flex justify-center items-center mb-72 px-10 sm:px-0">
-      <div className="flex flex-col w-[100px">
-        <Title title="Verificar Orden" />
+    <div className="flex justify-center items-center mb-20 px-4 sm:px-0">
+      <div className="flex flex-col w-full max-w-4xl">
+        <Title title="Confirmar pedido" />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
           {/* carrito */}
           <div className="flex flex-col mt-5">
-            <span className="text-xl">Ajustar Elementos</span>
+            <span className="text-xl">Tu pedido</span>
             <Link href="/cart" className="underline mb-5">
-              Editar Carrito
+              Editar carrito
             </Link>
 
             {/*  Items del Carrito */}
@@ -70,10 +71,10 @@ export default function () {
                   <p>{product.title} </p>
                   {product.size && <p className="text-sm text-gray-500">{product.size}</p>}
                   <p>
-                    ${product.price} x {product.quantity}{" "}
+                    {CurrencyFormat(product.price)} x {product.quantity}
                   </p>
                   <p className="font-bold">
-                    Subtotal: ${product.price * product.quantity}{" "}
+                    Subtotal: {CurrencyFormat(product.price * product.quantity)}
                   </p>
                 </div>
               </div>
@@ -81,22 +82,19 @@ export default function () {
           </div>
 
           {/* checkout compra- resumen */}
-          <div className="bg-white rounded-xl shadow-xl p-7 h-fit">
-            <div className="w-full h-0.5 rounder bg-gray-200 mb-10"></div>
-
-            <h2 className="text-2xl mb-2">Compra Final</h2>
+          <div className="bg-white rounded-xl shadow-xl p-5 sm:p-7 h-fit">
+            <h2 className="text-2xl mb-2">Resumen</h2>
 
             <OrderSumari  sendMessage={setsummary}/>
 
 
-            <div className="mt-5 mb-2 w-full flex btn-primary justify-center ">
-
-              <button
-                onClick={handlePlaceOrder}
-              >
-                Colocar Orden
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={handlePlaceOrder}
+              className="mt-5 mb-2 w-full flex btn-primary justify-center cursor-pointer"
+            >
+              Enviar pedido por WhatsApp
+            </button>
           </div>
         </div>
       </div>

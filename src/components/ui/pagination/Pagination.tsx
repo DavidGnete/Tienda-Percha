@@ -48,8 +48,10 @@ export const Pagination = ({ totalPages}: Props ) => {
 
 
 
+  if (totalPages <= 1) return null;
+
   return (
-    <div className="flex text-center justify-center mt-10 mb-32">
+    <div className="flex text-center justify-center mt-6 mb-16">
       <nav aria-label="Page navigation example">
         <ul className="flex list-style-none">
 

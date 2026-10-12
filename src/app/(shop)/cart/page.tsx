@@ -11,8 +11,8 @@ export default function CartPage() {
 
 
   return (
-    <div className="flex justify-center items-center mb-72 px-10 sm:px-0">
-      <div className="flex flex-col w-[100px">
+    <div className="flex justify-center items-center mb-20 px-4 sm:px-0">
+      <div className="flex flex-col w-full max-w-4xl">
 
         <Title 
         title="Carrito"
@@ -21,9 +21,9 @@ export default function CartPage() {
 
           {/* carrito */}
           <div className="flex flex-col mt-5">
-            <span className="text-xl">Agregar mas Items</span>
+            <span className="text-xl">¿Quieres agregar más productos?</span>
             <Link href="/" className="underline mb-5">
-            Continua Comprando
+            Seguir comprando
             </Link>
           
 
@@ -34,7 +34,7 @@ export default function CartPage() {
          </div>
 
           {/* checkout compra- resumen */}
-          <div className="bg-white rounded-xl shadow-xl p-7 h-fit">
+          <div className="bg-white rounded-xl shadow-xl p-5 sm:p-7 h-fit">
             <h2 className="text-2xl mb-2">Resumen de compra</h2>
 
           <OrderSumari />
@@ -43,7 +43,7 @@ export default function CartPage() {
               <Link href="/checkout"
               className="flex btn-primary justify-center"
               >
-              Checkout
+              Continuar con el pedido
               </Link>
             </div>
 

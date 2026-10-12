@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Image from 'next/image';
 import Link from 'next/link';
 import { ImageProducts } from '@/components/product/product-image/productImage';
+import { CurrencyFormat } from '@/utils';
 
 interface Props {
     product : Product;
@@ -31,13 +32,13 @@ export const ProductGridItem = ({ product}: Props ) => {
         </Link>
         
 
-        <div className='p-4 flex flex-col '>
+        <div className='py-2 px-1 sm:p-4 flex flex-col '>
             <Link
-            className='hover:text-blue-700'
+            className='hover:text-blue-700 text-sm sm:text-base line-clamp-2'
             href={`/product/${product.slug}`}>
             {product.title}
             </Link>
-            <span className='font-bold'>${product.price} </span>
+            <span className='font-bold'>{CurrencyFormat(product.price)}</span>
 
         </div>
     </div>

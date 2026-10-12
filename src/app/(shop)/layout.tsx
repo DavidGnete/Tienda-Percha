@@ -6,12 +6,12 @@ export default function ShopLayout({children}: {
  children: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen ">
+    <main className="min-h-screen flex flex-col">
       {/* <AnuncioModal /> */}
       <TopMenu />
       <Sidebar />
       <MovilMenu />
-      <div className="px-0 sm:px-10">
+      <div className="flex-1 px-0 sm:px-10">
         {children}
       </div>
       <Footer />

@@ -30,7 +30,7 @@ export const Sidebar = () => {
   const router = useRouter();
 
   return (
-    <div>
+    <div className="hidden sm:block">
       {/* background  */}
       {isSideMenuOpen && (
         <div className="fixed top-0 left-0 w-screen h-screen z-10 bg-black opacity-30"></div>
@@ -48,9 +48,10 @@ export const Sidebar = () => {
       {/* SideMenu */}
       <nav
         className={clsx(
-          "fixed p-5 right-0 top-0 w-[500px] h-screen bg-white z-20 shadow-2xl transform transition-all duration-300",
+          "fixed p-5 right-0 top-0 w-[500px] h-screen bg-white z-20 transform transition-all duration-300",
           {
             "translate-x-full": !isSideMenuOpen,
+            "shadow-2xl": isSideMenuOpen,
           },
         )}
       >
@@ -127,6 +128,7 @@ export const Sidebar = () => {
         <div className="w-full h-px bg-gray-300 my-10">
           <Link
             href="/admin/products"
+            onClick={closeMenu}
             className="flex items-center mt-10 p-2 hover:bg-gray-300 rounded transition-all"
           >
             <IoShirtOutline size={30} />

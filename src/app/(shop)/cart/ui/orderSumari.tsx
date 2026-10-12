@@ -38,12 +38,12 @@ export const OrderSumari = ({sendMessage}:Props ) => {
     sendMessage?.(summary);
   }, [summary, sendMessage])
 
-  if (!loaded) return <p>Loading...</p>;
+  if (!loaded) return <p>Cargando...</p>;
 
   return (
-    <div className="grid grid-cols-2 gap-x-20">
-      <span>Número de Articulos</span>
-      <span className="text-right">{summary.itemsInCart} articulos</span>
+    <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+      <span>Artículos</span>
+      <span className="text-right">{summary.itemsInCart}</span>
 
       <span>Subtotal</span>
       <span className="text-right">{CurrencyFormat(summary.subTotal)}</span>

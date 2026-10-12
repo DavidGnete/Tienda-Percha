@@ -1,10 +1,11 @@
 export const CurrencyFormat =(value: number) => {
 
-    return new Intl.NumberFormat('en-CO',{
+    // Pesos colombianos sin decimales: 30000 -> "$ 30.000"
+    return new Intl.NumberFormat('es-CO',{
         style:'currency',
-        currency: 'USD',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
+        currency: 'COP',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
 
     }).format(value);
 

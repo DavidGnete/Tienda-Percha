@@ -28,17 +28,18 @@ export default async function ProductsView({ searchParams}: Props ) {
 
   return (
     <>
-      <Title title="Mantenimeinto de Productos" />
+      <Title title="Mantenimiento de Productos" />
 
 
-      <div className="flex justify-end mb-5">
+      <div className="flex justify-end mb-5 px-4 sm:px-0">
         <Link href='/admin/product/new' className="btn-primary">
             Nuevo Producto
         </Link>
 
       </div>
 
-      <div className="mb-10">
+      {/* En celular la tabla se desliza horizontalmente para llegar a todas las columnas */}
+      <div className="mb-10 overflow-x-auto">
         <table className="min-w-full">
           <thead className="bg-gray-200 border-b">
             <tr>

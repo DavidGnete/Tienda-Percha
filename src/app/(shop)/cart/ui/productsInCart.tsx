@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useCartStore } from "@/store";
 import { ImageProducts, QuantitySelector } from "@/components";
 import Link from "next/link";
+import { CurrencyFormat } from "@/utils";
 
 
 export const ProductsInCart = () => {
@@ -42,7 +43,7 @@ export const ProductsInCart = () => {
               <p>{product.title} </p>
               {product.size && <p className="text-sm text-gray-500">{product.size}</p>}
             </Link>
-            <p>{product.price} </p>
+            <p>{CurrencyFormat(product.price)}</p>
             
             <QuantitySelector
               quantity={product.quantity}

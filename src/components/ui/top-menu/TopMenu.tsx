@@ -1,7 +1,7 @@
 "use client";
 import { titleFont } from "@/config/fonts";
 import Link from "next/link";
-import { IoSearchOutline, IoCartOutline} from "react-icons/io5";
+import { IoCartOutline, IoMenuOutline } from "react-icons/io5";
 import React, { useEffect, useState } from "react";
 import { useCartStore, useUIStore } from "@/store";
 
@@ -18,13 +18,13 @@ export const TopMenu = () => {
   },[])
 
   return (
-    <nav className="flex px-10 justify-between items-center w-full">
+    <nav className="flex px-4 py-3 sm:px-10 justify-between items-center w-full">
       <div>
-        <Link href="/">
+        <Link href="/" className="whitespace-nowrap">
           <span className={`${titleFont.className} antialiased font-bold`}>
             Tu Perchita{" "}
           </span>
-          <span> | Tienda</span>
+          <span className="hidden sm:inline"> | Tienda</span>
         </Link>
       </div>
 
@@ -47,6 +47,12 @@ export const TopMenu = () => {
         >
           Niños
         </Link>
+        <Link
+          className="m-2 p-2 rounded-md transition-all hover:bg-gray-100"
+          href="/gender/unisex"
+        >
+          Unisex
+        </Link>
       </div>
 
       <div className="flex items-center">
@@ -58,7 +64,7 @@ export const TopMenu = () => {
           ((totalItemInCart === 0) && loaded)
           ? "/empty"
           : "/cart"
-        }  className="m-10">
+        }  className="p-2 sm:m-10" aria-label="Carrito">
           <div className="relative">
             {(loaded && totalItemInCart > 0) && (
               <span className="fade-in absolute  text-xs  rounded-full px-1 font-bold -top-2 -right-2 bg-blue-700 text-white">
@@ -70,10 +76,12 @@ export const TopMenu = () => {
         </Link>
 
         <button
+          type="button"
           onClick={openMobileMenu}
-          className="sm:hidden m-2 p-2 hover:bg-gray-100 rounded-md"
+          aria-label="Abrir menú"
+          className="sm:hidden ml-1 p-2 hover:bg-gray-100 rounded-md"
         >
-          Menu
+          <IoMenuOutline className="w-7 h-7" />
         </button>
 
         {/* BOTÓN DESKTOP */}

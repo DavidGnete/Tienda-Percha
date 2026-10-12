@@ -35,9 +35,11 @@ export const StockLabel = ( {slug}: Props) => {
             &nbsp;
     </h1>
       ) :(
-    <h1 className={`${titleFont.className} antialiased font-bold text-lg `} >
-              Stock: { Stock}
-    </h1>
+    Stock > 0 && (
+    <p className={`${titleFont.className} antialiased font-bold text-sm text-gray-600`} >
+              Disponibles: { Stock}
+    </p>
+    )
 
       )
     }    
